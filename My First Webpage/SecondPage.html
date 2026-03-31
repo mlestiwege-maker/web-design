@@ -69,7 +69,10 @@
                     <a class="nav-link" href="SeventhPage.html">FAQ</a>
                   </li>
                   <li class="nav-item d-flex align-items-center mt-2 mt-lg-0">
-                    <a href="SecondPage.html" class="text-dark me-2" aria-label="View cart"><i class="fa fa-cart-arrow-down"></i></a>
+                    <button class="cart-toggle me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartDrawer" aria-controls="cartDrawer" aria-label="Open cart">
+                      <i class="fa fa-cart-arrow-down"></i>
+                      <span id="cartCount" class="cart-count">0</span>
+                    </button>
                     <a href="#featured" class="text-dark" aria-label="Search products"><i class="fa fa-search"></i></a>
                     <a href="#" class="text-dark me-2 wishlist-link" aria-label="Wishlist">
                       <i class="fa fa-heart"></i>
@@ -514,6 +517,23 @@
         </div>
     </footer>
 
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerLabel">
+        <div class="offcanvas-header">
+          <h5 id="cartDrawerLabel" class="mb-0">Your Cart</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+          <div id="cartItems" class="cart-items flex-grow-1"></div>
+          <div class="cart-footer pt-3 border-top mt-3">
+            <p class="d-flex justify-content-between mb-3"><span>Subtotal</span> <strong id="cartSubtotal">$0.00</strong></p>
+            <div class="d-grid gap-2">
+              <a href="EighthPage.html" class="shop-btn text-center">Go to Checkout</a>
+              <button id="clearCartBtn" type="button" class="btn btn-outline-secondary">Clear Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -535,6 +555,10 @@
         <script>
           const themeToggle = document.getElementById('themeToggle');
           const wishlistCountEl = document.getElementById('wishlistCount');
+          const cartCountEl = document.getElementById('cartCount');
+          const cartItemsEl = document.getElementById('cartItems');
+          const cartSubtotalEl = document.getElementById('cartSubtotal');
+          const clearCartBtn = document.getElementById('clearCartBtn');
           const setThemeIcon = (isDark) => {
             if (!themeToggle) return;
             themeToggle.innerHTML = isDark ? '<i class="fa fa-sun"></i>' : '<i class="fa fa-moon"></i>';
@@ -572,6 +596,7 @@
 
           const categoryByIndex = ['shoes', 'watches', 'clothes', 'accessories'];
           let wishlist = JSON.parse(localStorage.getItem('mufu-wishlist') || '[]');
+          let cart = JSON.parse(localStorage.getItem('mufu-cart') || '[]');
 
           const updateWishlistCount = () => {
             if (wishlistCountEl) {
@@ -596,6 +621,66 @@
               button.classList.toggle('active', selected);
               button.setAttribute('aria-label', selected ? 'Remove from wishlist' : 'Add to wishlist');
             });
+          };
+
+          const saveCart = () => {
+            localStorage.setItem('mufu-cart', JSON.stringify(cart));
+          };
+
+          const updateCartCount = () => {
+            const total = cart.reduce((sum, item) => sum + item.qty, 0);
+            if (cartCountEl) {
+              cartCountEl.textContent = String(total);
+            }
+          };
+
+          const renderCart = () => {
+            if (!cartItemsEl || !cartSubtotalEl) return;
+
+            if (cart.length === 0) {
+              cartItemsEl.innerHTML = '<p class="text-muted mb-0">Your cart is empty. Add some products ✨</p>';
+              cartSubtotalEl.textContent = '$0.00';
+              updateCartCount();
+              return;
+            }
+
+            cartItemsEl.innerHTML = cart.map((item) => `
+              <div class="cart-item d-flex gap-2 mb-3" data-cart-id="${item.id}">
+                <img src="${item.image}" alt="${item.name}" class="cart-thumb">
+                <div class="flex-grow-1">
+                  <h6 class="mb-1 text-dark">${item.name}</h6>
+                  <p class="mb-1 text-muted small">$${item.price.toFixed(2)} x ${item.qty}</p>
+                  <div class="d-flex align-items-center gap-2">
+                    <button class="cart-qty-btn" data-action="dec" data-id="${item.id}" type="button">-</button>
+                    <span>${item.qty}</span>
+                    <button class="cart-qty-btn" data-action="inc" data-id="${item.id}" type="button">+</button>
+                    <button class="cart-remove-btn ms-auto" data-id="${item.id}" type="button">Remove</button>
+                  </div>
+                </div>
+              </div>
+            `).join('');
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            cartSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+            updateCartCount();
+          };
+
+          const addToCart = (productCard) => {
+            const id = productCard.dataset.productId;
+            const name = productCard.querySelector('.p-name')?.textContent || 'Product';
+            const priceText = productCard.querySelector('.p-price')?.textContent || '$0.00';
+            const price = Number(priceText.replace('$', '')) || 0;
+            const image = productCard.querySelector('img')?.getAttribute('src') || '';
+
+            const existing = cart.find((item) => item.id === id);
+            if (existing) {
+              existing.qty += 1;
+            } else {
+              cart.push({ id, name, price, image, qty: 1 });
+            }
+
+            saveCart();
+            renderCart();
           };
 
           products.forEach((product, index) => {
@@ -649,7 +734,47 @@
               if (!id) return;
               toggleWishlist(id);
               updateWishlistButtons();
+              return;
             }
+
+            const buyBtn = event.target.closest('.buy-btn');
+            if (buyBtn) {
+              const card = buyBtn.closest('.product');
+              if (!card) return;
+              addToCart(card);
+            }
+          });
+
+          cartItemsEl?.addEventListener('click', function (event) {
+            const qtyBtn = event.target.closest('.cart-qty-btn');
+            const removeBtn = event.target.closest('.cart-remove-btn');
+
+            if (qtyBtn) {
+              const id = qtyBtn.dataset.id;
+              const action = qtyBtn.dataset.action;
+              const item = cart.find((entry) => entry.id === id);
+              if (!item) return;
+
+              if (action === 'inc') item.qty += 1;
+              if (action === 'dec') item.qty -= 1;
+              cart = cart.filter((entry) => entry.qty > 0);
+              saveCart();
+              renderCart();
+              return;
+            }
+
+            if (removeBtn) {
+              const id = removeBtn.dataset.id;
+              cart = cart.filter((entry) => entry.id !== id);
+              saveCart();
+              renderCart();
+            }
+          });
+
+          clearCartBtn?.addEventListener('click', function () {
+            cart = [];
+            saveCart();
+            renderCart();
           });
 
           const applyFilters = () => {
@@ -698,6 +823,7 @@
           applyFilters();
           updateWishlistCount();
           updateWishlistButtons();
+          renderCart();
         </script>
     </body>
 

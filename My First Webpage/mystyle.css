@@ -135,6 +135,36 @@ cursor: pointer;
     padding: 0 4px;
     font-weight: 600;
 }
+
+.cart-toggle {
+    position: relative;
+    border: none;
+    background: transparent;
+    color: #1d1d1d;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-count {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: #fb774b;
+    color: #fff;
+    font-size: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    font-weight: 600;
+}
 /* Mobile Nav */
 .navbar-light .navbar-toggler{
     border: lavender;
@@ -352,6 +382,38 @@ text-align: start;
 
         #quickViewPrice {
             color: #fb774b;
+        }
+
+        .cart-thumb {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-qty-btn,
+        .cart-remove-btn {
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+        }
+
+        .cart-qty-btn:hover,
+        .cart-remove-btn:hover {
+            border-color: #fb774b;
+            color: #fb774b;
+        }
+
+        .checkout-section {
+            min-height: 100vh;
+        }
+
+        .checkout-card {
+            border-radius: 14px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+            background: #fff;
         }
     #banner{
         background-image: url(img/banner/2.jpg);
@@ -589,6 +651,38 @@ text-align: start;
 
     body.dark-theme .quick-view-btn {
         background: #fb774b;
+    }
+
+    body.dark-theme .cart-toggle,
+    body.dark-theme .offcanvas-title,
+    body.dark-theme #cartDrawerLabel,
+    body.dark-theme .offcanvas-body,
+    body.dark-theme .offcanvas-header,
+    body.dark-theme .offcanvas,
+    body.dark-theme .btn-close,
+    body.dark-theme .cart-item h6,
+    body.dark-theme .cart-item span,
+    body.dark-theme .cart-footer p,
+    body.dark-theme .checkout-card,
+    body.dark-theme .checkout-card h5,
+    body.dark-theme .checkout-card p,
+    body.dark-theme .checkout-card label,
+    body.dark-theme .checkout-card span,
+    body.dark-theme .checkout-card strong {
+        color: #ececec !important;
+    }
+
+    body.dark-theme .offcanvas,
+    body.dark-theme .checkout-card {
+        background: #1f1f1f;
+    }
+
+    body.dark-theme .cart-qty-btn,
+    body.dark-theme .cart-remove-btn,
+    body.dark-theme .checkout-card .form-control {
+        background: #2a2a2a;
+        color: #ececec;
+        border-color: #3a3a3a;
     }
 
     body.dark-theme .wishlist-btn {
