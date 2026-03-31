@@ -314,3 +314,119 @@ text-align: start;
         color: #fff;
         background-color: #fb774b;
     }
+
+    /* Unique homepage sections */
+    .lookbook-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .lookbook-card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+        display: block;
+    }
+
+    .lookbook-card:hover img {
+        transform: scale(1.07);
+    }
+
+    .lookbook-overlay {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 14px;
+        color: #fff;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.05));
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    #testimonials {
+        background: linear-gradient(120deg, #fff 0%, #fff6f2 100%);
+    }
+
+    .testimonial-card {
+        max-width: 760px;
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .testimonial-avatar {
+        width: 78px;
+        height: 78px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 3px solid #fb774b;
+    }
+
+    #testimonialCarousel .carousel-control-prev-icon,
+    #testimonialCarousel .carousel-control-next-icon {
+        background-color: rgba(0, 0, 0, 0.35);
+        border-radius: 50%;
+        background-size: 60% 60%;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    #newsletter {
+        background: #1d1d1d;
+    }
+
+    .newsletter-box {
+        max-width: 860px;
+        background: linear-gradient(135deg, rgba(251, 119, 75, 0.2), rgba(244, 67, 54, 0.25));
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 18px;
+        padding: 2.2rem 1.4rem;
+    }
+
+    .newsletter-box h3,
+    .newsletter-box p {
+        color: #fff;
+    }
+
+    .newsletter-box .form-control {
+        border: none;
+        border-radius: 8px;
+    }
+
+    #newsletterStatus {
+        min-height: 24px;
+        font-weight: 500;
+    }
+
+    .back-to-top {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #fb774b;
+        color: #fff;
+        border: none;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(12px);
+        transition: all 0.25s ease;
+        padding: 0;
+    }
+
+    .back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+        background: #f44336;
+    }
