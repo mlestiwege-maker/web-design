@@ -307,6 +307,11 @@ text-align: start;
         } 
         .product img{
             transition: 0.3s;
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 8px;
         }
         .product:hover {
             transform: translateY(-4px);
@@ -414,6 +419,44 @@ text-align: start;
             border-radius: 14px;
             box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
             background: #fff;
+        }
+
+        /* Image consistency system */
+        #new .one img {
+            height: 380px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        #brand img {
+            height: 74px;
+            width: 100%;
+            object-fit: contain;
+            padding: 6px;
+        }
+
+        .card .card-img-top {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        footer .row img.img-fluid.w-25 {
+            width: 68px !important;
+            height: 68px !important;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        @media only screen and (max-width: 991px) {
+            .product img {
+                height: 220px;
+            }
+
+            #new .one img {
+                height: 300px;
+            }
         }
 
         .coupon-box {
@@ -703,6 +746,14 @@ text-align: start;
     body.dark-theme .coupon-box {
         background: #292221;
         border-color: #51403b;
+    }
+
+    body.dark-theme .card,
+    body.dark-theme .service-card,
+    body.dark-theme .contact-card {
+        background: #1f1f1f;
+        border-color: #3a3a3a;
+        color: #ececec;
     }
 
     body.dark-theme .wishlist-btn {
