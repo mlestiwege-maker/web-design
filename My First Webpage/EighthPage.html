@@ -30,6 +30,7 @@
               <li class="nav-item"><a class="nav-link" href="SixthPage.html">Services</a></li>
               <li class="nav-item"><a class="nav-link" href="SeventhPage.html">FAQ</a></li>
               <li class="nav-item"><a class="nav-link active" href="EighthPage.html">Checkout</a></li>
+              <li class="nav-item"><a class="nav-link" href="NinthPage.html">Orders</a></li>
             </ul>
           </div>
         </div>
@@ -80,10 +81,20 @@
                     <div class="checkout-card p-4">
                         <h5 class="mb-3">Order Summary</h5>
                         <div id="checkoutItems"></div>
+                      <div class="coupon-box mt-3">
+                        <label for="couponCode" class="form-label">Promo Code</label>
+                        <div class="d-flex gap-2">
+                          <input type="text" id="couponCode" class="form-control" placeholder="Try MUFU10">
+                          <button id="applyCouponBtn" type="button" class="btn btn-dark">Apply</button>
+                        </div>
+                        <p id="couponStatus" class="small mt-2 mb-0"></p>
+                      </div>
                         <hr>
                         <p class="d-flex justify-content-between mb-1"><span>Subtotal</span><strong id="checkoutSubtotal">$0.00</strong></p>
+                      <p class="d-flex justify-content-between mb-1"><span>Discount</span><span id="checkoutDiscount">-$0.00</span></p>
                         <p class="d-flex justify-content-between mb-1"><span>Shipping</span><span id="checkoutShipping">$5.00</span></p>
                         <p class="d-flex justify-content-between mb-0 fs-5"><span>Total</span><strong id="checkoutTotal">$0.00</strong></p>
+                      <a href="NinthPage.html" class="btn btn-outline-dark w-100 mt-3">View Order History</a>
                     </div>
                 </div>
             </div>
@@ -94,9 +105,13 @@
     <script>
       const checkoutItems = document.getElementById('checkoutItems');
       const checkoutSubtotal = document.getElementById('checkoutSubtotal');
+      const checkoutDiscount = document.getElementById('checkoutDiscount');
       const checkoutTotal = document.getElementById('checkoutTotal');
       const checkoutForm = document.getElementById('checkoutForm');
       const checkoutStatus = document.getElementById('checkoutStatus');
+      const couponCode = document.getElementById('couponCode');
+      const applyCouponBtn = document.getElementById('applyCouponBtn');
+      const couponStatus = document.getElementById('couponStatus');
 
       const savedTheme = localStorage.getItem('mufu-theme');
       if (savedTheme === 'dark') {
@@ -104,10 +119,33 @@
       }
 
       const cart = JSON.parse(localStorage.getItem('mufu-cart') || '[]');
+      const validCoupons = {
+        MUFU10: 0.10,
+        STYLE15: 0.15,
+        VIP20: 0.20
+      };
+      let currentDiscountRate = 0;
+      let currentCoupon = '';
+
+      const getSubtotal = () => cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+      const updateTotals = () => {
+        const subtotal = getSubtotal();
+        const shipping = subtotal > 0 ? 5 : 0;
+        const discountValue = subtotal * currentDiscountRate;
+        const total = Math.max(subtotal - discountValue + shipping, 0);
+
+        checkoutSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+        checkoutDiscount.textContent = `-$${discountValue.toFixed(2)}`;
+        checkoutTotal.textContent = `$${total.toFixed(2)}`;
+
+        return { subtotal, shipping, discountValue, total };
+      };
 
       const renderSummary = () => {
         if (cart.length === 0) {
           checkoutItems.innerHTML = '<p class="text-muted mb-0">Your cart is empty. <a href="SecondPage.html">Go back to shop</a>.</p>';
+          checkoutDiscount.textContent = '-$0.00';
           checkoutSubtotal.textContent = '$0.00';
           checkoutTotal.textContent = '$0.00';
           return;
@@ -120,12 +158,33 @@
           </div>
         `).join('');
 
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        const shipping = 5;
-        const total = subtotal + shipping;
-        checkoutSubtotal.textContent = `$${subtotal.toFixed(2)}`;
-        checkoutTotal.textContent = `$${total.toFixed(2)}`;
+        updateTotals();
       };
+
+      applyCouponBtn.addEventListener('click', function () {
+        const code = couponCode.value.trim().toUpperCase();
+
+        if (!code) {
+          couponStatus.textContent = 'Enter a promo code first.';
+          couponStatus.style.color = '#dc3545';
+          return;
+        }
+
+        if (!validCoupons[code]) {
+          currentDiscountRate = 0;
+          currentCoupon = '';
+          couponStatus.textContent = 'Invalid code. Try MUFU10, STYLE15, or VIP20.';
+          couponStatus.style.color = '#dc3545';
+          updateTotals();
+          return;
+        }
+
+        currentDiscountRate = validCoupons[code];
+        currentCoupon = code;
+        couponStatus.textContent = `Coupon ${code} applied successfully!`;
+        couponStatus.style.color = '#198754';
+        updateTotals();
+      });
 
       checkoutForm.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -142,12 +201,34 @@
           return;
         }
 
+        const { subtotal, shipping, discountValue, total } = updateTotals();
+
+        const orders = JSON.parse(localStorage.getItem('mufu-orders') || '[]');
+        orders.unshift({
+          id: `ORD-${Date.now()}`,
+          date: new Date().toLocaleString(),
+          customer: {
+            name: document.getElementById('fullName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            city: document.getElementById('city').value.trim()
+          },
+          coupon: currentCoupon || null,
+          totals: {
+            subtotal,
+            shipping,
+            discount: discountValue,
+            total
+          },
+          items: cart
+        });
+        localStorage.setItem('mufu-orders', JSON.stringify(orders));
+
         checkoutStatus.textContent = 'Order placed successfully! Thank you for shopping with Mufutumari Shop.';
         checkoutStatus.style.color = '#198754';
         localStorage.removeItem('mufu-cart');
         checkoutForm.reset();
         setTimeout(() => {
-          window.location.href = 'SecondPage.html';
+          window.location.href = 'NinthPage.html';
         }, 1300);
       });
 
