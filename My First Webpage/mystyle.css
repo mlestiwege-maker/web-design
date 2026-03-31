@@ -113,6 +113,28 @@ cursor: pointer;
     background: #fb774b;
     color: #fff;
 }
+
+.wishlist-link {
+    position: relative;
+    text-decoration: none;
+}
+
+.wishlist-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: #f44336;
+    color: #fff;
+    font-size: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    font-weight: 600;
+}
 /* Mobile Nav */
 .navbar-light .navbar-toggler{
     border: lavender;
@@ -272,6 +294,64 @@ text-align: start;
         .product:hover .buy-btn{
             transform: translateY(20px);
             opacity: 1;
+        }
+
+        .product-actions {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 0.25s ease;
+        }
+
+        .product:hover .product-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quick-view-btn,
+        .wishlist-btn {
+            border: none;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 8px 12px;
+            transition: 0.25s ease;
+            text-transform: uppercase;
+        }
+
+        .quick-view-btn {
+            background: #1d1d1d;
+            color: #fff;
+        }
+
+        .quick-view-btn:hover {
+            background: #fb774b;
+        }
+
+        .wishlist-btn {
+            background: #ffe8e2;
+            color: #f44336;
+            min-width: 42px;
+        }
+
+        .wishlist-btn.active,
+        .wishlist-btn:hover {
+            background: #f44336;
+            color: #fff;
+        }
+
+        #quickViewModal .modal-content {
+            border: none;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+        }
+
+        #quickViewModal .modal-header {
+            background: #fff6f2;
+        }
+
+        #quickViewPrice {
+            color: #fb774b;
         }
     #banner{
         background-image: url(img/banner/2.jpg);
@@ -505,6 +585,31 @@ text-align: start;
     body.dark-theme .theme-toggle {
         background: #313131;
         color: #f6f6f6;
+    }
+
+    body.dark-theme .quick-view-btn {
+        background: #fb774b;
+    }
+
+    body.dark-theme .wishlist-btn {
+        background: #3a2a2a;
+        color: #ff9e9e;
+    }
+
+    body.dark-theme .wishlist-btn.active,
+    body.dark-theme .wishlist-btn:hover {
+        background: #f44336;
+        color: #fff;
+    }
+
+    body.dark-theme #quickViewModal .modal-content {
+        background: #1f1f1f;
+        color: #ececec;
+    }
+
+    body.dark-theme #quickViewModal .modal-header {
+        background: #2a2a2a;
+        border-bottom-color: #3b3b3b;
     }
 
     body.dark-theme footer {
