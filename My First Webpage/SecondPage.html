@@ -71,6 +71,9 @@
                   <li class="nav-item d-flex align-items-center mt-2 mt-lg-0">
                     <a href="SecondPage.html" class="text-dark me-2" aria-label="View cart"><i class="fa fa-cart-arrow-down"></i></a>
                     <a href="#featured" class="text-dark" aria-label="Search products"><i class="fa fa-search"></i></a>
+                    <button id="themeToggle" class="theme-toggle ms-2" type="button" aria-label="Switch to dark mode">
+                      <i class="fa fa-moon"></i>
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -82,8 +85,37 @@
               <h2 class="font-weight-bold">Shop Now</h2>
               <hr class="">
               <p> Here you will find the cheapest prices in store for you to use </p>
+
+              <div class="row g-2 align-items-end mt-3 mb-2">
+                <div class="col-lg-4 col-md-6 col-12">
+                  <label for="productSearch" class="form-label">Search products</label>
+                  <input id="productSearch" type="text" class="form-control" placeholder="Try: shoes, watches, clothes...">
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                  <label for="categoryFilter" class="form-label">Category</label>
+                  <select id="categoryFilter" class="form-select">
+                    <option value="all">All</option>
+                    <option value="shoes">Shoes</option>
+                    <option value="watches">Watches</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="accessories">Accessories</option>
+                  </select>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                  <label for="sortFilter" class="form-label">Sort by</label>
+                  <select id="sortFilter" class="form-select">
+                    <option value="default">Default</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name: A to Z</option>
+                  </select>
+                </div>
+                <div class="col-lg-2 col-md-6 col-12 text-md-end">
+                  <p id="resultsCount" class="mb-0 text-muted">24 items</p>
+                </div>
               </div>
-            <div class="row mx-auto container-fluid" >
+              </div>
+            <div id="productGrid" class="row mx-auto container-fluid" >
             <div class="product  text-center col-lg-3 col-md-4 col-12">
               <img class="img-fluid mb-3" src="img/featured/1.jpg"  alt="">
               <div class="star">
@@ -479,6 +511,101 @@
     </footer>
           
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script>
+          const themeToggle = document.getElementById('themeToggle');
+          const setThemeIcon = (isDark) => {
+            if (!themeToggle) return;
+            themeToggle.innerHTML = isDark ? '<i class="fa fa-sun"></i>' : '<i class="fa fa-moon"></i>';
+            themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+          };
+
+          const savedTheme = localStorage.getItem('mufu-theme');
+          if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            setThemeIcon(true);
+          } else {
+            setThemeIcon(false);
+          }
+
+          if (themeToggle) {
+            themeToggle.addEventListener('click', function () {
+              const isDark = document.body.classList.toggle('dark-theme');
+              localStorage.setItem('mufu-theme', isDark ? 'dark' : 'light');
+              setThemeIcon(isDark);
+            });
+          }
+
+          const productGrid = document.getElementById('productGrid');
+          const products = Array.from(document.querySelectorAll('#featured .product'));
+          const searchInput = document.getElementById('productSearch');
+          const categoryFilter = document.getElementById('categoryFilter');
+          const sortFilter = document.getElementById('sortFilter');
+          const resultsCount = document.getElementById('resultsCount');
+
+          const categoryByIndex = ['shoes', 'watches', 'clothes', 'accessories'];
+
+          products.forEach((product, index) => {
+            const category = categoryByIndex[Math.floor(index / 6)] || 'accessories';
+            const numberInCategory = (index % 6) + 1;
+            const price = 35 + (index * 3);
+            const productName = `${category.charAt(0).toUpperCase() + category.slice(1)} Pick ${numberInCategory}`;
+
+            product.dataset.category = category;
+            product.dataset.price = String(price);
+            product.dataset.name = productName.toLowerCase();
+            product.dataset.defaultOrder = String(index);
+
+            const nameEl = product.querySelector('.p-name');
+            const priceEl = product.querySelector('.p-price');
+            if (nameEl) nameEl.textContent = productName;
+            if (priceEl) priceEl.textContent = `$${price.toFixed(2)}`;
+          });
+
+          const applyFilters = () => {
+            const query = (searchInput?.value || '').trim().toLowerCase();
+            const category = categoryFilter?.value || 'all';
+
+            const visibleProducts = products.filter((product) => {
+              const matchesQuery = !query || product.dataset.name.includes(query);
+              const matchesCategory = category === 'all' || product.dataset.category === category;
+              const isVisible = matchesQuery && matchesCategory;
+              product.classList.toggle('d-none', !isVisible);
+              return isVisible;
+            });
+
+            if (resultsCount) {
+              resultsCount.textContent = `${visibleProducts.length} item${visibleProducts.length === 1 ? '' : 's'}`;
+            }
+          };
+
+          const applySort = () => {
+            const sortValue = sortFilter?.value || 'default';
+            const sorted = [...products].sort((a, b) => {
+              if (sortValue === 'price-low') {
+                return Number(a.dataset.price) - Number(b.dataset.price);
+              }
+              if (sortValue === 'price-high') {
+                return Number(b.dataset.price) - Number(a.dataset.price);
+              }
+              if (sortValue === 'name') {
+                return a.dataset.name.localeCompare(b.dataset.name);
+              }
+              return Number(a.dataset.defaultOrder) - Number(b.dataset.defaultOrder);
+            });
+
+            sorted.forEach((item) => productGrid?.appendChild(item));
+          };
+
+          searchInput?.addEventListener('input', applyFilters);
+          categoryFilter?.addEventListener('change', applyFilters);
+          sortFilter?.addEventListener('change', () => {
+            applySort();
+            applyFilters();
+          });
+
+          applySort();
+          applyFilters();
+        </script>
     </body>
 
 </html>
