@@ -209,6 +209,71 @@ cursor: pointer;
     color: #5a3327;
     font-weight: 500;
 }
+
+.contact-badges span {
+    background: #fff1ea;
+    color: #7b3e2b;
+    border: 1px solid #ffd7c9;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.contact-card {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.contact-form {
+    border: 1px solid #efefef;
+    border-radius: 14px;
+    padding: 1.2rem;
+    background: #fff;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.05);
+}
+
+.contact-form .form-control {
+    border-radius: 8px;
+    padding: 11px;
+}
+
+.contact-side-panel {
+    background: linear-gradient(135deg, #fff9f7 0%, #fff2ec 100%);
+    border: 1px solid #ffd9cd;
+    border-radius: 14px;
+    padding: 1.1rem;
+}
+
+.contact-promise-list li {
+    margin-bottom: 0.55rem;
+    font-size: 0.9rem;
+    color: #5b453d;
+}
+
+.contact-mini-card {
+    background: #fff;
+    border: 1px solid #f2d6cc;
+    border-radius: 10px;
+    padding: 0.85rem;
+}
+
+.faq-compact-card {
+    border: 1px solid #efefef;
+    border-radius: 14px;
+    background: #fff;
+    padding: 1.1rem;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.faq-compact-card .accordion-button:not(.collapsed) {
+    background: #fff1ea;
+    color: #7b3e2b;
+}
 /* Mobile Nav */
 .navbar-light .navbar-toggler{
     border: lavender;
@@ -906,6 +971,12 @@ text-align: start;
         color: #ffd9cb;
     }
 
+    body.dark-theme .contact-badges span {
+        background: #342724;
+        border-color: #564039;
+        color: #ffd9cb;
+    }
+
     body.dark-theme .trend-chip {
         background: #262626;
         border-color: #3a3a3a;
@@ -1005,10 +1076,35 @@ text-align: start;
 
     body.dark-theme .card,
     body.dark-theme .service-card,
-    body.dark-theme .contact-card {
+    body.dark-theme .contact-card,
+    body.dark-theme .contact-form,
+    body.dark-theme .faq-compact-card,
+    body.dark-theme .contact-mini-card {
         background: #1f1f1f;
         border-color: #3a3a3a;
         color: #ececec;
+    }
+
+    body.dark-theme .contact-side-panel {
+        background: linear-gradient(135deg, #2a2321 0%, #312825 100%);
+        border-color: #4e3e39;
+    }
+
+    body.dark-theme .contact-promise-list li {
+        color: #dbcbca;
+    }
+
+    body.dark-theme .faq-compact-card .accordion-item,
+    body.dark-theme .faq-compact-card .accordion-button,
+    body.dark-theme .faq-compact-card .accordion-body {
+        background: #1f1f1f;
+        color: #ececec;
+        border-color: #3a3a3a;
+    }
+
+    body.dark-theme .faq-compact-card .accordion-button:not(.collapsed) {
+        background: #3a2d29;
+        color: #ffd9cb;
     }
 
     body.dark-theme .wishlist-btn {

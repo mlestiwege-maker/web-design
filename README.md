@@ -32,6 +32,7 @@ This project keeps its original structure while adding professional marketplace-
 - Supplier/buyer value section (verified quality, bulk-friendly offers, regional delivery messaging)
 - Shop trust badges and trending search chips
 - Recently viewed products in shop
+- Contact page upgraded to a buyer support + RFQ hub with inquiry type, quantity, budget, and preferred contact time
 - Premium product cards with quick-view and wishlist actions
 
 ### Shopping Experience
@@ -40,6 +41,7 @@ This project keeps its original structure while adding professional marketplace-
 - Shipping progress bar toward free-shipping target
 - Checkout workflow with coupon support
 - Order history and order tracking pages
+- Contact inquiry capture and quick FAQ support section
 
 ### UX & UI
 - Dark mode (saved with `localStorage`)
@@ -63,6 +65,7 @@ This project keeps its original structure while adding professional marketplace-
 - `mufu-cart` — cart items and quantities
 - `mufu-orders` — placed orders
 - `mufu-recently-viewed` — recently viewed shop products
+- `mufu-contact-leads` — recent contact/RFQ submissions
 
 ## Run Locally
 
