@@ -973,6 +973,10 @@ text-align: start;
         background: #25d366;
     }
 
+    .mobile-sticky-cta {
+        display: none;
+    }
+
     @media only screen and (max-width: 991px) {
         .navbar-brand span {
             font-size: 1.45rem;
@@ -1013,7 +1017,7 @@ text-align: start;
 
         .contact-float {
             right: 12px;
-            bottom: 88px;
+            bottom: 128px;
             gap: 8px;
         }
 
@@ -1057,6 +1061,53 @@ text-align: start;
 
         #new .details h2 {
             font-size: 1.35rem;
+        }
+    }
+
+    @media only screen and (max-width: 767px) {
+        .mobile-sticky-cta {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1005;
+            background: #ffffff;
+            border-top: 1px solid #e9e9e9;
+            box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.08);
+            padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .mobile-sticky-cta a {
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 9px 6px;
+            color: #fff;
+        }
+
+        .mobile-sticky-cta a i {
+            margin-right: 4px;
+        }
+
+        .mobile-sticky-cta .cta-call {
+            background: #fb774b;
+        }
+
+        .mobile-sticky-cta .cta-whatsapp {
+            background: #25d366;
+        }
+
+        .mobile-sticky-cta .cta-main {
+            background: #1d1d1d;
+        }
+
+        body {
+            padding-bottom: 76px;
         }
     }
 
@@ -1164,6 +1215,16 @@ text-align: start;
     body.dark-theme .theme-toggle {
         background: #313131;
         color: #f6f6f6;
+    }
+
+    body.dark-theme .mobile-sticky-cta {
+        background: #1b1b1b;
+        border-top-color: #333;
+        box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    body.dark-theme .mobile-sticky-cta .cta-main {
+        background: #fb774b;
     }
 
     body.dark-theme .quick-view-btn {
