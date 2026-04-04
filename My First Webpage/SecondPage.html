@@ -21,13 +21,23 @@
         background-color: black;
       }
 
-      #featured>div.row.mx-auto.container-fluid>nav>ul>li:nth-child(n):hover>a{
+      #featured>div.row.mx-auto.container-fluid>nav>ul>li:nth-child(n):hover>.page-link{
            background-color: coral;
            color: cornsilk;
       }
 
-      .pagination a{
+      .pagination .page-link{
         color: rgb(34, 30, 22);
+        text-transform: none;
+        font-weight: 500;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        padding: 0.45rem 0.75rem;
+        border-radius: 0;
+      }
+
+      .pagination .page-link:focus {
+        box-shadow: none;
       }
     </style>
     </head>
@@ -455,17 +465,12 @@
             
             
             <nav aria-label="...">
-              <ul class="pagination mt-5">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1">Previous</a>
+              <ul class="pagination mt-5" id="paginationList">
+                <li class="page-item" id="prevPageItem">
+                  <button class="page-link" id="prevPageBtn" type="button">Previous</button>
                 </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item ">
-                  <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#">Next</a>
+                <li class="page-item" id="nextPageItem">
+                  <button class="page-link" id="nextPageBtn" type="button">Next</button>
                 </li>
               </ul>
             </nav>
@@ -634,6 +639,11 @@
           const categoryFilter = document.getElementById('categoryFilter');
           const sortFilter = document.getElementById('sortFilter');
           const resultsCount = document.getElementById('resultsCount');
+          const paginationList = document.getElementById('paginationList');
+          const prevPageItem = document.getElementById('prevPageItem');
+          const nextPageItem = document.getElementById('nextPageItem');
+          const prevPageBtn = document.getElementById('prevPageBtn');
+          const nextPageBtn = document.getElementById('nextPageBtn');
           const quickViewModalEl = document.getElementById('quickViewModal');
           const quickViewName = document.getElementById('quickViewName');
           const quickViewPrice = document.getElementById('quickViewPrice');
@@ -649,6 +659,8 @@
           let wishlist = JSON.parse(localStorage.getItem('mufu-wishlist') || '[]');
           let cart = JSON.parse(localStorage.getItem('mufu-cart') || '[]');
           let recentlyViewed = JSON.parse(localStorage.getItem('mufu-recently-viewed') || '[]');
+          let currentPage = 1;
+          const itemsPerPage = window.innerWidth <= 767 ? 6 : 8;
 
           const updateWishlistCount = () => {
             if (wishlistCountEl) {
@@ -898,21 +910,67 @@
             renderCart();
           });
 
+          const renderPaginationControls = (totalPages) => {
+            if (!paginationList || !nextPageItem) return;
+
+            paginationList.querySelectorAll('.page-number-item').forEach((item) => item.remove());
+
+            for (let page = 1; page <= totalPages; page += 1) {
+              const li = document.createElement('li');
+              li.className = `page-item page-number-item${page === currentPage ? ' active' : ''}`;
+
+              const button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'page-link page-number-btn';
+              button.dataset.page = String(page);
+              button.textContent = String(page);
+
+              li.appendChild(button);
+              paginationList.insertBefore(li, nextPageItem);
+            }
+
+            prevPageItem?.classList.toggle('disabled', currentPage === 1);
+            nextPageItem?.classList.toggle('disabled', currentPage === totalPages);
+          };
+
+          const renderVisibleProducts = () => {
+            const filteredProducts = products.filter((product) => product.dataset.filterMatch === '1');
+            const totalPages = Math.max(1, Math.ceil(filteredProducts.length / itemsPerPage));
+
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const productsInPage = filteredProducts.slice(start, end);
+
+            products.forEach((product) => {
+              product.classList.add('d-none');
+            });
+
+            productsInPage.forEach((product) => {
+              product.classList.remove('d-none');
+            });
+
+            if (resultsCount) {
+              resultsCount.textContent = `${filteredProducts.length} item${filteredProducts.length === 1 ? '' : 's'}`;
+            }
+
+            renderPaginationControls(totalPages);
+          };
+
           const applyFilters = () => {
             const query = (searchInput?.value || '').trim().toLowerCase();
             const category = categoryFilter?.value || 'all';
 
-            const visibleProducts = products.filter((product) => {
+            products.forEach((product) => {
               const matchesQuery = !query || product.dataset.name.includes(query);
               const matchesCategory = category === 'all' || product.dataset.category === category;
-              const isVisible = matchesQuery && matchesCategory;
-              product.classList.toggle('d-none', !isVisible);
-              return isVisible;
+              product.dataset.filterMatch = matchesQuery && matchesCategory ? '1' : '0';
             });
 
-            if (resultsCount) {
-              resultsCount.textContent = `${visibleProducts.length} item${visibleProducts.length === 1 ? '' : 's'}`;
-            }
+            currentPage = 1;
+            renderVisibleProducts();
           };
 
           const applySort = () => {
@@ -938,6 +996,27 @@
           sortFilter?.addEventListener('change', () => {
             applySort();
             applyFilters();
+          });
+
+          paginationList?.addEventListener('click', (event) => {
+            const pageButton = event.target.closest('.page-number-btn');
+            if (pageButton) {
+              currentPage = Number(pageButton.dataset.page || '1');
+              renderVisibleProducts();
+              return;
+            }
+          });
+
+          prevPageBtn?.addEventListener('click', () => {
+            if (prevPageItem?.classList.contains('disabled')) return;
+            currentPage -= 1;
+            renderVisibleProducts();
+          });
+
+          nextPageBtn?.addEventListener('click', () => {
+            if (nextPageItem?.classList.contains('disabled')) return;
+            currentPage += 1;
+            renderVisibleProducts();
           });
 
           applySort();

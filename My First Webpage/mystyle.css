@@ -389,6 +389,11 @@ background-size: cover;
 position: relative;
 }
 
+#new .one {
+    position: relative;
+    overflow: hidden;
+}
+
 #new .one .details{
     position: absolute;
     width: 100%;
@@ -629,9 +634,12 @@ text-align: start;
 
         #brand img {
             height: 74px;
-            width: 100%;
+            width: auto;
+            max-width: 100%;
             object-fit: contain;
             padding: 6px;
+            display: block;
+            margin: 0 auto;
         }
 
         .card .card-img-top {
