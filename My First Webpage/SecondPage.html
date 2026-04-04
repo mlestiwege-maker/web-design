@@ -100,6 +100,20 @@
               <hr class="">
               <p> Here you will find the cheapest prices in store for you to use </p>
 
+              <div class="shop-trust-row d-flex flex-wrap gap-2 mb-3">
+                <span><i class="fa fa-shield-alt me-1"></i>Buyer Protection</span>
+                <span><i class="fa fa-check-circle me-1"></i>Verified Quality</span>
+                <span><i class="fa fa-credit-card me-1"></i>Secure Payments</span>
+                <span><i class="fa fa-truck me-1"></i>Fast Dispatch</span>
+              </div>
+
+              <div class="trend-chips mb-3" aria-label="Trending searches">
+                <button type="button" class="trend-chip" data-query="shoes">Trending: Shoes</button>
+                <button type="button" class="trend-chip" data-query="watches">Top Watches</button>
+                <button type="button" class="trend-chip" data-query="clothes">New Clothes</button>
+                <button type="button" class="trend-chip" data-query="accessories">Accessories</button>
+              </div>
+
               <div class="row g-2 align-items-end mt-3 mb-2">
                 <div class="col-lg-4 col-md-6 col-12">
                   <label for="productSearch" class="form-label">Search products</label>
@@ -455,6 +469,14 @@
                 </li>
               </ul>
             </nav>
+
+            <section id="recentlyViewedSection" class="mt-4 d-none">
+              <div class="w-100">
+                <h4 class="mb-2">Recently Viewed</h4>
+                <p class="text-muted mb-3">Quickly return to items you checked recently.</p>
+                <div id="recentlyViewedList" class="row g-3"></div>
+              </div>
+            </section>
           </div> 
 
           </section>
@@ -533,6 +555,12 @@
           <div id="cartItems" class="cart-items flex-grow-1"></div>
           <div class="cart-footer pt-3 border-top mt-3">
             <p class="d-flex justify-content-between mb-3"><span>Subtotal</span> <strong id="cartSubtotal">$0.00</strong></p>
+            <div class="shipping-progress-wrap mb-3">
+              <p id="shippingProgressText" class="small mb-2">Add $150.00 for free shipping</p>
+              <div class="shipping-progress-bar">
+                <div id="shippingProgressFill" class="shipping-progress-fill"></div>
+              </div>
+            </div>
             <div class="d-grid gap-2">
               <a href="EighthPage.html" class="shop-btn text-center">Go to Checkout</a>
               <button id="clearCartBtn" type="button" class="btn btn-outline-secondary">Clear Cart</button>
@@ -599,11 +627,16 @@
           const quickViewPrice = document.getElementById('quickViewPrice');
           const quickViewCategory = document.getElementById('quickViewCategory');
           const quickViewImage = document.getElementById('quickViewImage');
+          const recentlyViewedSection = document.getElementById('recentlyViewedSection');
+          const recentlyViewedList = document.getElementById('recentlyViewedList');
+          const shippingProgressFill = document.getElementById('shippingProgressFill');
+          const shippingProgressText = document.getElementById('shippingProgressText');
           const quickViewModal = quickViewModalEl ? new bootstrap.Modal(quickViewModalEl) : null;
 
           const categoryByIndex = ['shoes', 'watches', 'clothes', 'accessories'];
           let wishlist = JSON.parse(localStorage.getItem('mufu-wishlist') || '[]');
           let cart = JSON.parse(localStorage.getItem('mufu-cart') || '[]');
+          let recentlyViewed = JSON.parse(localStorage.getItem('mufu-recently-viewed') || '[]');
 
           const updateWishlistCount = () => {
             if (wishlistCountEl) {
@@ -647,6 +680,8 @@
             if (cart.length === 0) {
               cartItemsEl.innerHTML = '<p class="text-muted mb-0">Your cart is empty. Add some products ✨</p>';
               cartSubtotalEl.textContent = '$0.00';
+              if (shippingProgressFill) shippingProgressFill.style.width = '0%';
+              if (shippingProgressText) shippingProgressText.textContent = 'Add $150.00 for free shipping';
               updateCartCount();
               return;
             }
@@ -669,7 +704,64 @@
 
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             cartSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+
+            const freeShippingTarget = 150;
+            const ratio = Math.min((subtotal / freeShippingTarget) * 100, 100);
+            if (shippingProgressFill) {
+              shippingProgressFill.style.width = `${ratio}%`;
+            }
+            if (shippingProgressText) {
+              if (subtotal >= freeShippingTarget) {
+                shippingProgressText.textContent = '🎉 You unlocked free shipping!';
+              } else {
+                shippingProgressText.textContent = `Add $${(freeShippingTarget - subtotal).toFixed(2)} for free shipping`;
+              }
+            }
+
             updateCartCount();
+          };
+
+          const renderRecentlyViewed = () => {
+            if (!recentlyViewedSection || !recentlyViewedList) return;
+
+            if (!recentlyViewed.length) {
+              recentlyViewedSection.classList.add('d-none');
+              recentlyViewedList.innerHTML = '';
+              return;
+            }
+
+            recentlyViewedSection.classList.remove('d-none');
+            recentlyViewedList.innerHTML = recentlyViewed.map((item) => `
+              <div class="col-lg-3 col-md-4 col-6">
+                <div class="recent-item-card h-100">
+                  <img src="${item.image}" alt="${item.name}">
+                  <div class="p-2">
+                    <h6 class="mb-1">${item.name}</h6>
+                    <p class="mb-2">$${Number(item.price).toFixed(2)}</p>
+                    <button type="button" class="quick-view-btn w-100" data-product-id="${item.id}">View Again</button>
+                  </div>
+                </div>
+              </div>
+            `).join('');
+          };
+
+          const saveRecentlyViewed = (product) => {
+            recentlyViewed = recentlyViewed.filter((item) => item.id !== product.id);
+            recentlyViewed.unshift(product);
+            recentlyViewed = recentlyViewed.slice(0, 8);
+            localStorage.setItem('mufu-recently-viewed', JSON.stringify(recentlyViewed));
+            renderRecentlyViewed();
+          };
+
+          const recordProductInteraction = (productCard) => {
+            if (!productCard) return;
+            const id = productCard.dataset.productId;
+            if (!id) return;
+            const name = productCard.querySelector('.p-name')?.textContent || 'Product';
+            const priceText = productCard.querySelector('.p-price')?.textContent || '$0.00';
+            const price = Number(priceText.replace('$', '')) || 0;
+            const image = productCard.querySelector('img')?.getAttribute('src') || '';
+            saveRecentlyViewed({ id, name, price, image });
           };
 
           const addToCart = (productCard) => {
@@ -727,6 +819,7 @@
             if (quickViewBtn) {
               const card = quickViewBtn.closest('.product');
               if (!card || !quickViewModal) return;
+              recordProductInteraction(card);
               quickViewName.textContent = card.querySelector('.p-name')?.textContent || 'Product';
               quickViewPrice.textContent = card.querySelector('.p-price')?.textContent || '$0.00';
               quickViewCategory.textContent = `Category: ${(card.dataset.category || 'general').toUpperCase()}`;
@@ -748,8 +841,17 @@
             if (buyBtn) {
               const card = buyBtn.closest('.product');
               if (!card) return;
+              recordProductInteraction(card);
               addToCart(card);
             }
+          });
+
+          document.querySelectorAll('.trend-chip').forEach((chip) => {
+            chip.addEventListener('click', () => {
+              if (!searchInput) return;
+              searchInput.value = chip.dataset.query || '';
+              applyFilters();
+            });
           });
 
           cartItemsEl?.addEventListener('click', function (event) {
@@ -831,6 +933,7 @@
           updateWishlistCount();
           updateWishlistButtons();
           renderCart();
+          renderRecentlyViewed();
         </script>
     </body>
 
