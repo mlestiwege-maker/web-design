@@ -95,6 +95,37 @@ cursor: pointer;
  transition: 0.3s ease;
 }
 
+.brand-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1d1d1d 0%, #3b3b3b 100%);
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
+.footer-brand-mark {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fb774b 0%, #f44336 100%);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    box-shadow: 0 8px 18px rgba(244, 67, 54, 0.25);
+}
+
 .theme-toggle {
     border: none;
     background: #f3f3f3;
@@ -983,6 +1014,12 @@ text-align: start;
             line-height: 1.1;
         }
 
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            font-size: 0.95rem;
+        }
+
         .market-top-strip {
             margin-top: 78px;
         }
@@ -1032,9 +1069,10 @@ text-align: start;
             font-size: 1.2rem;
         }
 
-        .navbar-brand img {
-            width: 40px;
-            height: 40px;
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            font-size: 0.88rem;
         }
 
         .market-top-strip {
@@ -1136,6 +1174,15 @@ text-align: start;
     body.dark-theme .bg-white {
         background: #1e1e1e !important;
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    body.dark-theme .brand-mark {
+        background: linear-gradient(135deg, #fb774b 0%, #f44336 100%);
+    }
+
+    body.dark-theme .footer-brand-mark {
+        background: linear-gradient(135deg, #fb774b 0%, #f44336 100%);
+        box-shadow: 0 8px 18px rgba(244, 67, 54, 0.35);
     }
 
     body.dark-theme .navbar-light .navbar-nav .nav-link,
