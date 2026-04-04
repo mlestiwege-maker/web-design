@@ -660,7 +660,7 @@
           let cart = JSON.parse(localStorage.getItem('mufu-cart') || '[]');
           let recentlyViewed = JSON.parse(localStorage.getItem('mufu-recently-viewed') || '[]');
           let currentPage = 1;
-          const itemsPerPage = window.innerWidth <= 767 ? 6 : 8;
+          let itemsPerPage = window.innerWidth <= 767 ? 6 : 8;
 
           const updateWishlistCount = () => {
             if (wishlistCountEl) {
@@ -1017,6 +1017,15 @@
             if (nextPageItem?.classList.contains('disabled')) return;
             currentPage += 1;
             renderVisibleProducts();
+          });
+
+          window.addEventListener('resize', () => {
+            const nextItemsPerPage = window.innerWidth <= 767 ? 6 : 8;
+            if (nextItemsPerPage !== itemsPerPage) {
+              itemsPerPage = nextItemsPerPage;
+              currentPage = 1;
+              renderVisibleProducts();
+            }
           });
 
           applySort();

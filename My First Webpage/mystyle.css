@@ -973,6 +973,93 @@ text-align: start;
         background: #25d366;
     }
 
+    @media only screen and (max-width: 991px) {
+        .navbar-brand span {
+            font-size: 1.45rem;
+            line-height: 1.1;
+        }
+
+        .market-top-strip {
+            margin-top: 78px;
+        }
+
+        .market-top-strip .container {
+            justify-content: center !important;
+            text-align: center;
+        }
+
+        #home {
+            min-height: 86vh;
+            height: auto;
+            padding-top: 100px;
+            background-position: center top;
+        }
+
+        #home h1 {
+            font-size: 2.1rem;
+            line-height: 1.2;
+        }
+
+        #home p {
+            max-width: 460px;
+        }
+
+        #new .details h2 {
+            font-size: 1.65rem;
+            line-height: 1.2;
+            padding: 0 10px;
+            text-align: center;
+        }
+
+        .contact-float {
+            right: 12px;
+            bottom: 88px;
+            gap: 8px;
+        }
+
+        .contact-float-btn {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    @media only screen and (max-width: 576px) {
+        .navbar-brand span {
+            font-size: 1.2rem;
+        }
+
+        .navbar-brand img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .market-top-strip {
+            margin-top: 74px;
+        }
+
+        .market-top-strip span {
+            font-size: 0.72rem;
+        }
+
+        #home {
+            min-height: 80vh;
+            padding-top: 92px;
+        }
+
+        #home h1 {
+            font-size: 1.9rem;
+        }
+
+        #home p {
+            font-size: 1rem;
+            max-width: 320px;
+        }
+
+        #new .details h2 {
+            font-size: 1.35rem;
+        }
+    }
+
     /* Dark mode */
     body.dark-theme {
         background: #121212;
