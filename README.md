@@ -34,6 +34,7 @@ This project keeps its original structure while adding professional marketplace-
 - Recently viewed products in shop
 - Contact page upgraded to a buyer support + RFQ hub with inquiry type, quantity, budget, and preferred contact time
 - Premium product cards with quick-view and wishlist actions
+- One-tap buyer contact actions (Call, Email, WhatsApp) on key pages
 
 ### Shopping Experience
 - Product search + category filter + sorting
@@ -48,6 +49,7 @@ This project keeps its original structure while adding professional marketplace-
 - Page loader animation
 - Back-to-top button
 - Hover micro-interactions and polished card styling
+- Floating quick-contact widget for faster buyer communication
 
 ## Browser Technologies
 

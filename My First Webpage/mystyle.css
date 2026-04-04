@@ -776,6 +776,21 @@ text-align: start;
         color:#999;
         font-size:0.8rem
     }
+
+    footer p a,
+    .contact-card p a,
+    .contact-mini-card a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 1px dashed rgba(251, 119, 75, 0.45);
+    }
+
+    footer p a:hover,
+    .contact-card p a:hover,
+    .contact-mini-card a:hover {
+        color: #fb774b;
+        border-bottom-color: #fb774b;
+    }
     footer .copyright a{
         color:#000;
         width:38px;
@@ -909,6 +924,47 @@ text-align: start;
         background: #f44336;
     }
 
+    .contact-float {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 998;
+    }
+
+    .contact-float-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .contact-float-btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+        color: #fff;
+    }
+
+    .contact-float-btn.call {
+        background: #fb774b;
+    }
+
+    .contact-float-btn.email {
+        background: #2563eb;
+    }
+
+    .contact-float-btn.whatsapp {
+        background: #25d366;
+    }
+
     /* Dark mode */
     body.dark-theme {
         background: #121212;
@@ -1017,6 +1073,20 @@ text-align: start;
 
     body.dark-theme .quick-view-btn {
         background: #fb774b;
+    }
+
+    body.dark-theme footer p a,
+    body.dark-theme .contact-card p a,
+    body.dark-theme .contact-mini-card a {
+        color: #ececec;
+        border-bottom-color: rgba(255, 176, 152, 0.5);
+    }
+
+    body.dark-theme footer p a:hover,
+    body.dark-theme .contact-card p a:hover,
+    body.dark-theme .contact-mini-card a:hover {
+        color: #ffb098;
+        border-bottom-color: #ffb098;
     }
 
     body.dark-theme .cart-toggle,
