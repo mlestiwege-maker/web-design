@@ -1444,3 +1444,304 @@ text-align: start;
             transform: rotate(360deg);
         }
     }
+
+    /* ===== Mobile-First Responsive Enhancements ===== */
+
+    /* Prevent horizontal scroll */
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
+    img, video, svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* General mobile spacing and typography */
+    @media only screen and (max-width: 991px) {
+        .container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+        }
+
+        h4 {
+            font-size: 1.15rem;
+        }
+
+        .shop-btn {
+            padding: 10px 22px;
+            font-size: 0.75rem;
+        }
+
+        .navbar-brand span {
+            font-size: 1.2rem;
+        }
+
+        .market-top-strip {
+            margin-top: 76px;
+        }
+
+        .market-top-strip span {
+            font-size: 0.78rem;
+        }
+
+        #home {
+            min-height: 80vh;
+            height: auto;
+            padding: 100px 0 60px;
+        }
+
+        #home h1 {
+            font-size: 2rem;
+        }
+
+        #home p {
+            font-size: 1rem;
+        }
+
+        .product img {
+            height: 220px;
+        }
+
+        #new .one img {
+            height: 260px;
+        }
+
+        .deal-card img {
+            height: 200px;
+        }
+
+        .lookbook-card img {
+            height: 240px;
+        }
+
+        .testimonial-card {
+            padding: 1.5rem 1.25rem;
+        }
+
+        .testimonial-avatar {
+            width: 64px;
+            height: 64px;
+        }
+
+        .newsletter-box {
+            padding: 1.5rem 1rem;
+        }
+
+        .contact-float {
+            right: 10px;
+            bottom: 100px;
+        }
+
+        .contact-float-btn {
+            width: 38px;
+            height: 38px;
+        }
+    }
+
+    /* Small mobile devices */
+    @media only screen and (max-width: 576px) {
+        .container {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        h1 {
+            font-size: 1.65rem;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+        }
+
+        h4 {
+            font-size: 1.05rem;
+        }
+
+        .navbar-brand span {
+            font-size: 1rem;
+        }
+
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            font-size: 0.85rem;
+        }
+
+        .market-top-strip {
+            margin-top: 72px;
+            padding: 0.5rem 0;
+        }
+
+        .market-top-strip span {
+            font-size: 0.7rem;
+        }
+
+        #home {
+            min-height: 75vh;
+            padding: 90px 0 50px;
+        }
+
+        #home h1 {
+            font-size: 1.7rem;
+        }
+
+        #home p {
+            font-size: 0.95rem;
+            max-width: 100%;
+        }
+
+        .shop-btn {
+            padding: 10px 20px;
+            font-size: 0.75rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        .product img {
+            height: 200px;
+        }
+
+        #new .one img {
+            height: 220px;
+        }
+
+        .deal-card img {
+            height: 180px;
+        }
+
+        .lookbook-card img {
+            height: 200px;
+        }
+
+        .testimonial-card {
+            padding: 1.25rem 1rem;
+            border-radius: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+        }
+
+        .newsletter-box {
+            padding: 1.25rem 0.85rem;
+            border-radius: 12px;
+        }
+
+        .contact-float {
+            display: none;
+        }
+
+        .checkout-card {
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .cart-thumb {
+            width: 48px;
+            height: 48px;
+        }
+
+        footer h5 {
+            font-size: 1.05rem;
+        }
+
+        footer li a,
+        footer p {
+            font-size: 0.78rem;
+        }
+
+        #brand img {
+            height: 50px;
+        }
+
+        .card .card-img-top {
+            height: 180px;
+        }
+
+        footer .row img.img-fluid.w-25 {
+            width: 52px !important;
+            height: 52px !important;
+        }
+
+        .back-to-top {
+            width: 38px;
+            height: 38px;
+            right: 12px;
+            bottom: 12px;
+        }
+    }
+
+    /* Extra small devices */
+    @media only screen and (max-width: 400px) {
+        .navbar-brand span {
+            font-size: 0.9rem;
+        }
+
+        .market-top-strip span {
+            font-size: 0.65rem;
+        }
+
+        #home h1 {
+            font-size: 1.5rem;
+        }
+
+        #home p {
+            font-size: 0.9rem;
+        }
+
+        .product img {
+            height: 180px;
+        }
+
+        #new .one img {
+            height: 200px;
+        }
+
+        .deal-card img {
+            height: 160px;
+        }
+
+        .lookbook-card img {
+            height: 180px;
+        }
+    }
+
+    /* Touch-friendly interactive elements */
+    @media (hover: none) and (pointer: coarse) {
+        .shop-btn,
+        .btn,
+        button,
+        .nav-link {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .product-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .product .buy-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
